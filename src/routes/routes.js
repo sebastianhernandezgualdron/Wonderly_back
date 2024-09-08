@@ -10,7 +10,12 @@ import * as ActivityController from "../controllers/ActivityController.js";
 import * as UserController from "../controllers/UserController.js";
 import * as FavoriteActivitiesController from "../controllers/FavoriteActivitiesController.js";
 import * as ActivitiesReservationController from "../controllers/ActivitiesReservationController.js";
-
+import * as HotelCityController from "../controllers/HotelCityController.js";
+import * as HotelRoomController from "../controllers/HotelRoomController.js";
+import * as HotelCityServicesController from "../controllers/HotelCityServicesController.js";
+import * as FavoriteHotelsController from "../controllers/FavoriteHotelsController.js";
+import * as HotelRatingController from "../controllers/HotelRatingController.js";
+import * as HotelReservationController from "../controllers/HotelReservationController.js";
 
 router
 
@@ -42,45 +47,86 @@ router
   .delete("/room/:id", RoomController.Delete)
 
   //RUTAS SERVICIOS DE HOTEL
-  .get("/hotels/services", HotelServicesController.Index)
-  .get("/hotels/services/:id", HotelServicesController.Show)
-  .post("/hotels/services", HotelServicesController.Store)
-  .put("/hotels/services/:id", HotelServicesController.Amend)
-  .delete("/hotels/services/:id", HotelServicesController.Delete)
+  .get("/services", HotelServicesController.Index)
+  .get("/services/:id", HotelServicesController.Show)
+  .post("/services", HotelServicesController.Store)
+  .put("/services/:id", HotelServicesController.Amend)
+  .delete("/services/:id", HotelServicesController.Delete)
 
-   //RUTAS CIUDADES
-   .get("/city/", CityController.Index)
-   .get("/city/:id", CityController.Show)
-   .post("/city/", CityController.Store)
-   .put("/city/:id", CityController.Amend)
-   .delete("/city/:id", CityController.Delete)
+  //RUTAS CIUDADES
+  .get("/city/", CityController.Index)
+  .get("/city/:id", CityController.Show)
+  .post("/city/", CityController.Store)
+  .put("/city/:id", CityController.Amend)
+  .delete("/city/:id", CityController.Delete)
 
+  //RUTAS ACTIVIDADES
+  .get("/activity/", ActivityController.Index)
+  .get("/activity/:id", ActivityController.Show)
+  .post("/activity/", ActivityController.Store)
+  .put("/activity/:id", ActivityController.Amend)
+  .delete("/activity/:id", ActivityController.Delete)
 
-   //RUTAS ACTIVIDADES
-   .get("/activity/", ActivityController.Index)
-   .get("/activity/:id", ActivityController.Show)
-   .post("/activity/", ActivityController.Store)
-   .put("/activity/:id", ActivityController.Amend)
-   .delete("/activity/:id", ActivityController.Delete)
+  //RUTAS USUARIO
+  .get("/user/", UserController.Index)
+  .get("/user/:id", UserController.Show)
+  .post("/login/", UserController.Store)
+  .put("/user/:id", UserController.Amend)
+  .delete("/user/:id", UserController.Delete)
 
-   //RUTAS USUARIO
-   .get("/user/", UserController.Index)
-   .get("/user/:id", UserController.Show)
-   .post("/login/", UserController.Store)
-   .put("/user/:id", UserController.Amend)
-   .delete("/user/:id", UserController.Delete)
+  //RUTAS ACTIVIDADES FAVORITAS
+  .get("/activities/favorite", FavoriteActivitiesController.Index)
+  .get("/activities/favorite/:id", FavoriteActivitiesController.Show)
+  .post("/activities/favorite/", FavoriteActivitiesController.Store)
+  .put("/activities/favorite/:id", FavoriteActivitiesController.Amend)
+  .delete("/activities/favorite/:id", FavoriteActivitiesController.Delete)
 
-   //RUTAS ACTIVIDADES FAVORITAS
-   .get("/activities/favorite", FavoriteActivitiesController.Index)
-   .get("/activities/favorite/:id", FavoriteActivitiesController.Show)
-   .post("/activities/favorite/", FavoriteActivitiesController.Store)
-   .put("/activities/favorite/:id", FavoriteActivitiesController.Amend)
-   .delete("/activities/favorite/:id", FavoriteActivitiesController.Delete)
+  //RUTAS ACTIVIDADES RESERVADAS
+  .get("/reservation/activity", ActivitiesReservationController.Index)
+  .get("/reservation/activity/:id", ActivitiesReservationController.Show)
+  .post("/reservation/activity/", ActivitiesReservationController.Store)
+  .put("/reservation/activity/:id", ActivitiesReservationController.Amend)
+  .delete("/reservation/activity/:id", ActivitiesReservationController.Delete)
 
-   //RUTAS ACTIVIDADES RESERVADAS
-   .get("/reservation/activity", ActivitiesReservationController.Index)
-   .get("/reservation/activity/:id", ActivitiesReservationController.Show)
-   .post("/reservation/activity/", ActivitiesReservationController.Store)
-   .put("/reservation/activity/:id", ActivitiesReservationController.Amend)
-   .delete("/reservation/activity/:id", ActivitiesReservationController.Delete);
+  //RUTAS HOTELES EN CIUDAD
+  .get("/hotels/city/", HotelCityController.Index)
+  .get("/hotels/city/:id", HotelCityController.Show)
+  .post("/hotels/city/", HotelCityController.Store)
+  .put("/hotels/city/:id", HotelCityController.Amend)
+  .delete("/hotels/city/:id", HotelCityController.Delete)
+
+  //RUTAS HABITACIONES EN HOTEL
+  .get("/hotels/room/", HotelRoomController.Index)
+  .get("/hotels/room/:id", HotelRoomController.Show)
+  .post("/hotels/room/", HotelRoomController.Store)
+  .put("/hotels/room/:id", HotelRoomController.Amend)
+  .delete("/hotels/room/:id", HotelRoomController.Delete)
+
+  //RUTAS SERVICIOS EN HOTEL
+  .get("/hotels/service/", HotelCityServicesController.Index)
+  .get("/hotels/service/:id", HotelCityServicesController.Show)
+  .post("/hotels/service/", HotelCityServicesController.Store)
+  .put("/hotels/service/:id", HotelCityServicesController.Amend)
+  .delete("/hotels/service/:id", HotelCityServicesController.Delete)
+
+  //RUTAS HOTELES FAVORITOS
+  .get("/hotels/favorite/", FavoriteHotelsController.Index)
+  .get("/hotels/favorite/:id", FavoriteHotelsController.Show)
+  .post("/hotels/favorite/", FavoriteHotelsController.Store)
+  .put("/hotels/favorite/:id", FavoriteHotelsController.Amend)
+  .delete("/hotels/favorite/:id", FavoriteHotelsController.Delete)
+
+  //RUTAS HOTELES RATINGS
+  .get("/hotels/rating/", HotelRatingController.Index)
+  .get("/hotels/rating/:id", HotelRatingController.Show)
+  .post("/hotels/rating/", HotelRatingController.Store)
+  .put("/hotels/rating/:id", HotelRatingController.Amend)
+  .delete("/hotels/rating/:id", HotelRatingController.Delete)
+
+  //RUTAS HOTELES RESERVACIONES
+  .get("/hotels/reservation/", HotelReservationController.Index)
+  .get("/hotels/reservation/:id", HotelReservationController.Show)
+  .post("/hotels/reservation/", HotelReservationController.Store)
+  .put("/hotels/reservation/:id", HotelReservationController.Amend)
+  .delete("/hotels/reservation/:id", HotelReservationController.Delete);
 export { router };
