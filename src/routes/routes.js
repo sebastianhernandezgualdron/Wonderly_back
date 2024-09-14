@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 const router = express.Router();
 import * as PersonController from "../controllers/PersonController.js";
 import * as CountryController from "../controllers/CountryController.js";
@@ -16,8 +16,14 @@ import * as HotelCityServicesController from "../controllers/HotelCityServicesCo
 import * as FavoriteHotelsController from "../controllers/FavoriteHotelsController.js";
 import * as HotelRatingController from "../controllers/HotelRatingController.js";
 import * as HotelReservationController from "../controllers/HotelReservationController.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
-router
+
+router.post("/register/", UserController.Store)
+router.post("/login/", UserController.Login)
+
+router.use(authenticate)
+
 
   //RUTAS PERSONAS
   .get("/person", PersonController.Index)
@@ -70,7 +76,7 @@ router
   //RUTAS USUARIO
   .get("/user/", UserController.Index)
   .get("/user/:id", UserController.Show)
-  .post("/login/", UserController.Store)
+
   .put("/user/:id", UserController.Amend)
   .delete("/user/:id", UserController.Delete)
 

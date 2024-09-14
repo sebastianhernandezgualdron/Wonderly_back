@@ -1,6 +1,10 @@
 import { db } from "../../database.js";
 import joi from "joi";
 import bcrypt from "bcrypt";
+import pkg from 'jsonwebtoken';
+import { token } from "morgan";
+const { sign } = pkg;
+
 
 const getUsers = async () => {
   try {
@@ -133,4 +137,57 @@ const deleteUsers = async (id) => {
   }
 };
 
-export { getUsers, getUser, createUser, updateUsers, deleteUsers };
+const login = async (body, res) => {
+
+  try {
+   
+    const rules = joi.object({
+      use_mail: joi.string().email().required(),
+      use_password: joi.string().required(),
+    });
+
+    const validation = rules.validate(body);
+    if (validation.error) {
+      return validation.error;
+    }
+
+    const user = await db
+      .select()
+      .from("users")
+      .where("use_mail", body.use_mail)
+      .first();
+    if (!user) {
+      return { message: "Usuario no encontrado" };
+    }
+    const validPassword = await bcrypt.compare(body.use_password, user.use_password);
+    if (!validPassword) {
+      return { message: "Contraseña incorrecta" };
+    }
+
+    const token = sign({ id: user.use_id }, process.env.SECRET, {
+      expiresIn: "1h",
+    });
+
+    return res.status(200).json({
+      status: true,
+      message: "Usuario logueado correctamente",
+      token: token });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+const logout = async (res) => {
+
+  try {
+    return res.status(200).json({
+      status: true,
+      message: "Usuario deslogueado correctamente",
+      token: null });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+export { getUsers, getUser, createUser, updateUsers, deleteUsers, login};

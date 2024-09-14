@@ -87,4 +87,17 @@ const Delete = async (req, res) => {
   }
 };
 
-export { Index, Store, Amend, Show, Delete };
+const Login = async (req, res) => {
+
+  const result = await UserService.login(req.body, res);
+  if (result != null) {
+    return result;
+  } else {
+    return res.status(400).json({
+      message: `Error al obtener el usuario`,
+      sqlMessage: "No se encontró el usuario",
+    });
+  }
+}
+
+export { Index, Store, Amend, Show, Delete, Login};
