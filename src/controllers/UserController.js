@@ -91,7 +91,7 @@ const Login = async (req, res) => {
 
   const result = await UserService.login(req.body, res);
   if (result != null) {
-    return result;
+    return res.json(result.message);
   } else {
     return res.status(400).json({
       message: `Error al obtener el usuario`,

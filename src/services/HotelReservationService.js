@@ -2,6 +2,8 @@ import { db } from "../../database.js";
 import joi from "joi";
 import { getUser } from "./UserService.js";
 import { getHotelRoom } from "./HotelRoomService.js";
+import { getCity } from "./CityService.js";
+import { getHotel } from "./HotelService.js";
 import moment from "moment";
 
 const getHotelReservations = async () => {
@@ -191,10 +193,37 @@ const deleteHotelReservation = async (id) => {
   }
 };
 
+const getHotelReservationsByCity = async (id) => {
+  try{
+    const result = await db.select().from("hotel_cities").where("city_id", id);
+    for (const element of result) {
+      const city = await getCity(element.city_id);
+      const hotel = await getHotel(element.hot_id);
+      const { city_name, city_id, coun_name, coun_id } = city;
+      const { hot_id, hot_name } = hotel;
+
+      Object.assign(element, {
+        city_name,
+        city_id,
+        coun_name,
+        coun_id,
+        hot_id,
+        hot_name,
+      });
+    }
+
+    return result;
+  }catch(error){
+    console.log(error);
+    return error.message;
+  }
+}
+
 export {
   getHotelReservations,
   getHotelReservation,
   createHotelReservation,
   updateHotelReservation,
   deleteHotelReservation,
+  getHotelReservationsByCity
 };

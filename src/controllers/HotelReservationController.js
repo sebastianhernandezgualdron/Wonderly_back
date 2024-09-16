@@ -19,9 +19,7 @@ const Index = async (req, res) => {
 };
 
 const Store = async (req, res) => {
-  const result = await HotelReservationService.createHotelReservation(
-    req.body
-  );
+  const result = await HotelReservationService.createHotelReservation(req.body);
 
   if (!result.sqlMessage && !result.message) {
     return res.status(200).json({
@@ -94,4 +92,22 @@ const Delete = async (req, res) => {
   }
 };
 
-export { Index, Store, Amend, Show, Delete };
+const getHotelReservationsByCity = async (req, res) => {
+  const result = await HotelReservationService.getHotelReservationsByCity(
+    req.params.id
+  );
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay Hoteles en esta ciudad"    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener las Hoteles en esta ciudad",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+  
+};
+
+export { Index, Store, Amend, Show, Delete, getHotelReservationsByCity };

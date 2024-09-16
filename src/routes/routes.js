@@ -134,5 +134,6 @@ router.use(authenticate)
   .get("/hotels/reservation/:id", HotelReservationController.Show)
   .post("/hotels/reservation/", HotelReservationController.Store)
   .put("/hotels/reservation/:id", HotelReservationController.Amend)
-  .delete("/hotels/reservation/:id", HotelReservationController.Delete);
+  .delete("/hotels/reservation/:id", HotelReservationController.Delete)
+  .get("/hotels/reservation/city/:id", HotelReservationController.getHotelReservationsByCity);
 export { router };
