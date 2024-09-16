@@ -1,10 +1,9 @@
 import { db } from "../../database.js";
 import joi from "joi";
 import bcrypt from "bcrypt";
-import pkg from 'jsonwebtoken';
+import pkg from "jsonwebtoken";
 import { token } from "morgan";
 const { sign } = pkg;
-
 
 const getUsers = async () => {
   try {
@@ -35,11 +34,7 @@ const getUser = async (id) => {
     if (validation.error) {
       return validation.error.message;
     }
-    const result = await db
-      .select()
-      .from("users")
-      .where("use_id", id)
-      .first();
+    const result = await db.select().from("users").where("use_id", id).first();
     const person = await db
       .select()
       .from("persons")
@@ -59,25 +54,35 @@ const getUser = async (id) => {
 const createUser = async (body) => {
   try {
     const rules = joi.object({
+      per_name: joi.string().required(),
+      per_lastname: joi.string().required(),
+      per_document: joi.string().required(),
+      per_telephone: joi.string().required(),
+      per_mail: joi.string().email().required(),
       use_mail: joi.string().email().required(),
       use_password: joi
         .string()
         .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/)
         .required(),
-      per_id: joi.number().integer().positive().required(),
     });
 
     const validation = rules.validate(body);
     if (validation.error) {
       return validation.error;
     }
-
+    const person = await db("persons").insert({
+      per_name: body.per_name,
+      per_lastname: body.per_lastname,
+      per_document: body.per_document,
+      per_telephone: body.per_telephone,
+      per_mail: body.per_mail,
+    });
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(body.use_password, saltRounds);
     const result = await db("users").insert({
       use_mail: body.use_mail,
       use_password: hashedPassword,
-      per_id: body.per_id,
+      per_id: person[0],
     });
     return result;
   } catch (error) {
@@ -138,9 +143,7 @@ const deleteUsers = async (id) => {
 };
 
 const login = async (body, res) => {
-
   try {
-   
     const rules = joi.object({
       use_mail: joi.string().email().required(),
       use_password: joi.string().required(),
@@ -159,7 +162,10 @@ const login = async (body, res) => {
     if (!user) {
       return { message: "Usuario no encontrado" };
     }
-    const validPassword = await bcrypt.compare(body.use_password, user.use_password);
+    const validPassword = await bcrypt.compare(
+      body.use_password,
+      user.use_password
+    );
     if (!validPassword) {
       return { message: "Contraseña incorrecta" };
     }
@@ -171,23 +177,24 @@ const login = async (body, res) => {
     return res.status(200).json({
       status: true,
       message: "Usuario logueado correctamente",
-      token: token });
+      token: token,
+    });
   } catch (error) {
     console.log(error);
     return error;
   }
-}
+};
 
 const logout = async (res) => {
-
   try {
     return res.status(200).json({
       status: true,
       message: "Usuario deslogueado correctamente",
-      token: null });
+      token: null,
+    });
   } catch (error) {
     console.log(error);
     return error;
   }
-}
-export { getUsers, getUser, createUser, updateUsers, deleteUsers, login};
+};
+export { getUsers, getUser, createUser, updateUsers, deleteUsers, login };

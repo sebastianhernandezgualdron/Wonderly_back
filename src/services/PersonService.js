@@ -45,14 +45,14 @@ const createPerson = async (body) => {
     if (validation.error) {
       return validation.error;
     }
-    const result = await db("persons").insert({
+    const person = await db("persons").insert({
       per_name: body.per_name,
       per_lastname: body.per_lastname,
       per_document: body.per_document,
       per_telephone: body.per_telephone,
       per_mail: body.per_mail,
     });
-    return result;
+    return person;
   } catch (error) {
     console.log(error);
     return error;

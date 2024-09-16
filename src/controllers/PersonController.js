@@ -24,7 +24,6 @@ const Index = async (req, res) => {
 
 const Store = async (req, res) => {
   const result = await personService.createPerson(req.body);
-
   if (!result.sqlMessage && !result.message) {
     return res.status(200).json({
       message: `Persona: ${req.body.per_name} creada correctamente`,
