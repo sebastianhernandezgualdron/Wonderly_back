@@ -93,4 +93,24 @@ const Delete = async (req, res) => {
   }
 };
 
-export { Index, Store, Amend, Show, Delete };
+const FavoriteHotelsByUser = async (req, res) => {
+  const result = await FavoriteHotelsService.getFavoriteHotelsByUser(
+    req.params.id
+  );
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay hoteles favoritos",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener las hoteles favoritos",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+
+
+}
+
+export { Index, Store, Amend, Show, Delete, FavoriteHotelsByUser };

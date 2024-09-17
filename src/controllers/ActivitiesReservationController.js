@@ -7,7 +7,6 @@ const Index = async (req, res) => {
   if (Array.isArray(result) && result.length === 0) {
     return res.status(200).json({
       message: "No hay actividades reservadas",
-
     });
   } else if (result && !result.sqlMessage) {
     return res.status(200).json(result);
@@ -20,10 +19,12 @@ const Index = async (req, res) => {
 };
 
 const Store = async (req, res) => {
-  const result = await ActivitiesReservationService.createActivityReservation(req.body);
+  const result = await ActivitiesReservationService.createActivityReservation(
+    req.body
+  );
 
   if (!result.sqlMessage && !result.message) {
-    return res.status(200).json({ 
+    return res.status(200).json({
       message: `Actividad reservada registrada correctamente`,
     });
   } else {
@@ -35,11 +36,11 @@ const Store = async (req, res) => {
 };
 
 const Show = async (req, res) => {
-  const result = await ActivitiesReservationService.getActivityReservation(req.params.id);
+  const result = await ActivitiesReservationService.getActivityReservation(
+    req.params.id
+  );
   if (result != null) {
-    return res
-      .status(200)
-      .json(result);
+    return res.status(200).json(result);
   } else {
     return res.status(400).json({
       message: `Error al obtener la actividad reservada`,
@@ -49,7 +50,10 @@ const Show = async (req, res) => {
 };
 
 const Amend = async (req, res) => {
-  const result = await ActivitiesReservationService.updateActivityReservation(req.params.id, req.body);
+  const result = await ActivitiesReservationService.updateActivityReservation(
+    req.params.id,
+    req.body
+  );
   if (!result.sqlMessage && !result.message && result != 0) {
     return res.status(200).json({
       status: true,
@@ -69,15 +73,19 @@ const Amend = async (req, res) => {
 };
 
 const Delete = async (req, res) => {
-  const result = await ActivitiesReservationService.deleteActivityReservation
-  (req.params.id);
+  const result = await ActivitiesReservationService.deleteActivityReservation(
+    req.params.id
+  );
   if (result != 0) {
     return res
       .status(200)
       .json(
         result.message
           ? { status: false, message: result.message }
-          : { status: true, message: `Actividad reservada eliminado correctamente` }
+          : {
+              status: true,
+              message: `Actividad reservada eliminado correctamente`,
+            }
       );
   } else {
     return res.status(400).json({
@@ -87,4 +95,25 @@ const Delete = async (req, res) => {
   }
 };
 
-export { Index, Store, Amend, Show, Delete };
+const getActivitiesReservationsByUser = async (req, res) => {
+
+  const result = await ActivitiesReservationService.getActivitiesReservationsByUser(
+    req.params.id
+  );
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay actividades reservadas",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener la lista de actividades reservadas",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+
+
+};
+
+export { Index, Store, Amend, Show, Delete, getActivitiesReservationsByUser};

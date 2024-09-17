@@ -86,6 +86,7 @@ router.use(authenticate)
   .post("/activities/favorite/", FavoriteActivitiesController.Store)
   .put("/activities/favorite/:id", FavoriteActivitiesController.Amend)
   .delete("/activities/favorite/:id", FavoriteActivitiesController.Delete)
+  .get("/activities/favorite/user/:id", FavoriteActivitiesController.FavoriteActivitiesByUser)
 
   //RUTAS ACTIVIDADES RESERVADAS
   .get("/reservation/activity", ActivitiesReservationController.Index)
@@ -93,6 +94,7 @@ router.use(authenticate)
   .post("/reservation/activity/", ActivitiesReservationController.Store)
   .put("/reservation/activity/:id", ActivitiesReservationController.Amend)
   .delete("/reservation/activity/:id", ActivitiesReservationController.Delete)
+  .get("/reservation/activity/user/:id", ActivitiesReservationController.getActivitiesReservationsByUser)
 
   //RUTAS HOTELES EN CIUDAD
   .get("/hotels/city/", HotelCityController.Index)
@@ -121,7 +123,7 @@ router.use(authenticate)
   .post("/hotels/favorite/", FavoriteHotelsController.Store)
   .put("/hotels/favorite/:id", FavoriteHotelsController.Amend)
   .delete("/hotels/favorite/:id", FavoriteHotelsController.Delete)
-
+  .get("/hotels/favorite/user/:id", FavoriteHotelsController.FavoriteHotelsByUser)
   //RUTAS HOTELES RATINGS
   .get("/hotels/rating/", HotelRatingController.Index)
   .get("/hotels/rating/:id", HotelRatingController.Show)
@@ -135,5 +137,6 @@ router.use(authenticate)
   .post("/hotels/reservation/", HotelReservationController.Store)
   .put("/hotels/reservation/:id", HotelReservationController.Amend)
   .delete("/hotels/reservation/:id", HotelReservationController.Delete)
-  .get("/hotels/reservation/city/:id", HotelReservationController.getHotelReservationsByCity);
+  .get("/hotels/city/:id", HotelReservationController.getHotelsByCity)
+  .get("/hotels/reservation/user/:id", HotelReservationController.getHotelReservationsByUser);
 export { router };

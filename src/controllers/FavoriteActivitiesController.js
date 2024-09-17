@@ -87,4 +87,20 @@ const Delete = async (req, res) => {
   }
 };
 
-export { Index, Store, Amend, Show, Delete };
+const FavoriteActivitiesByUser = async (req, res) => {
+  const result = await FavoriteActivitiesService.getFavoriteActivitiesByUser(req.params.id);
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay actividades favoritas para este usuario",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener la lista de actividades favoritas",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+}
+
+export { Index, Store, Amend, Show, Delete, FavoriteActivitiesByUser };

@@ -156,10 +156,61 @@ const deleteFavoriteHotel = async (id) => {
   }
 };
 
+const getFavoriteHotelsByUser = async (id) => {
+  try {
+    const rules = joi.object({
+      id: joi.number().integer().positive().required(),
+    });
+    const validation = rules.validate({ id: id });
+    if (validation.error) {
+      return validation.error.message;
+    }
+    const result = await db
+      .select()
+      .from("favorite_hotels")
+      .where("use_id", id);
+      for (const element of result) {
+        
+        const hotelcity = await getHotelCity(element.hot_city_id);
+        const {
+          hot_city_address,
+          hot_city_rating,
+          hot_city_img,
+          city_name,
+          city_id,
+          coun_name,
+          coun_id,
+          hot_id,
+          hot_name,
+        } = hotelcity;
+  
+        Object.assign(element, {
+          hot_city_address,
+          hot_city_rating,
+          hot_city_img,
+          city_name,
+          city_id,
+          coun_name,
+          coun_id,
+          hot_id,
+          hot_name,
+        });
+      }
+    
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+
+
+}
+
 export {
   getFavoriteHotels,
   getFavoriteHotel,
   createFavoriteHotel,
   updateHotelCityService,
   deleteFavoriteHotel,
+  getFavoriteHotelsByUser
 };

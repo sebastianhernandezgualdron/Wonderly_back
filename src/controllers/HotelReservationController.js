@@ -92,8 +92,8 @@ const Delete = async (req, res) => {
   }
 };
 
-const getHotelReservationsByCity = async (req, res) => {
-  const result = await HotelReservationService.getHotelReservationsByCity(
+const getHotelsByCity = async (req, res) => {
+  const result = await HotelReservationService.getHotelsByCity(
     req.params.id
   );
   if (Array.isArray(result) && result.length === 0) {
@@ -107,7 +107,25 @@ const getHotelReservationsByCity = async (req, res) => {
       sqlMessage: result.sqlMessage,
     });
   }
-  
 };
 
-export { Index, Store, Amend, Show, Delete, getHotelReservationsByCity };
+const getHotelReservationsByUser = async (req, res) => {
+  const result = await HotelReservationService.getHotelReservationsByUser(
+    req.params.id
+  );
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay Reservaciones de hotel para este usuario",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener la lista de Reservaciones de hotel",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+
+}
+
+export { Index, Store, Amend, Show, Delete, getHotelsByCity, getHotelReservationsByUser };

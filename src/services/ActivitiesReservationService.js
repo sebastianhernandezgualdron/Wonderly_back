@@ -164,10 +164,66 @@ const deleteActivityReservation = async (id) => {
   }
 };
 
+const getActivitiesReservationsByUser = async (id) => {
+
+  try {
+    const rules = joi.object({
+      id: joi.number().integer().positive().required(),
+    });
+    const validation = rules.validate({ id: id });
+    if (validation.error) {
+      return validation.error.message;
+    }
+    const result = await db
+      .select()
+      .from("activities_reservation")
+      .where("use_id", id)
+      for (const element of result) {
+        const user = await UserController.getUser(element.use_id);
+        const activity = await ActivityController.getActivity(element.act_id);
+        const {
+          act_name,
+          act_desc,
+          act_address,
+          act_date,
+          act_time,
+          act_price,
+          city_id,
+          city_name,
+          coun_id,
+          coun_name,
+        } = activity;
+        const { per_name, per_lastname, use_mail, per_telephone } = user;
+  
+        Object.assign(element, {
+          act_name,
+          act_desc,
+          act_address,
+          act_date,
+          act_time,
+          act_price,
+          city_id,
+          city_name,
+          coun_id,
+          coun_name,
+          per_name,
+          per_lastname,
+          use_mail,
+          per_telephone,
+        });
+      }
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+}
+
 export {
   getActivitiesReservations,
   getActivityReservation,
   createActivityReservation,
   updateActivityReservation,
   deleteActivityReservation,
+  getActivitiesReservationsByUser
 };

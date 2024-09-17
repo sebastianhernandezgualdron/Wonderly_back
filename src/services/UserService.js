@@ -2,7 +2,6 @@ import { db } from "../../database.js";
 import joi from "joi";
 import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
-import { token } from "morgan";
 const { sign } = pkg;
 
 const getUsers = async () => {
@@ -58,7 +57,6 @@ const createUser = async (body) => {
       per_lastname: joi.string().required(),
       per_document: joi.string().required(),
       per_telephone: joi.string().required(),
-      per_mail: joi.string().email().required(),
       use_mail: joi.string().email().required(),
       use_password: joi
         .string()
@@ -75,13 +73,14 @@ const createUser = async (body) => {
       per_lastname: body.per_lastname,
       per_document: body.per_document,
       per_telephone: body.per_telephone,
-      per_mail: body.per_mail,
+      
     });
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(body.use_password, saltRounds);
     const result = await db("users").insert({
       use_mail: body.use_mail,
       use_password: hashedPassword,
+      use_img: "peppa.jpg",
       per_id: person[0],
     });
     return result;

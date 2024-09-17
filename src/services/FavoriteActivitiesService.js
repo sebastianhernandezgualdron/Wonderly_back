@@ -157,10 +157,44 @@ const deleteFavoriteActivities = async (id) => {
   }
 };
 
+const getFavoriteActivitiesByUser = async (id) => {
+  try{
+
+    const rules = joi.object({
+      id: joi.number().integer().positive().required(),
+    });
+
+    const validation = rules.validate({id:id});
+
+    if(validation.error){
+      return validation.error.message;
+    }
+
+    const result = await db.select().from("favorite_activities").where("use_id",id);
+
+    for(const element of result){
+      const activity = await ActivityController.getActivity(element.act_id);
+
+      const {act_name,act_desc,act_address,act_date,act_time,act_price,city_id} = activity;
+      
+
+      Object.assign(element,{act_name,act_desc,act_address,act_date,act_time,act_price,city_id});
+    }
+
+    return result;
+  }catch(error){
+
+
+  }
+
+
+}
+
 export {
   getFavoriteActivities,
   getFavoriteActivity,
   createFavoriteActivity,
   updateFavoriteActivity,
   deleteFavoriteActivities,
+  getFavoriteActivitiesByUser
 };

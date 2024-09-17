@@ -5,14 +5,18 @@ import { getHotelRoom } from "./HotelRoomService.js";
 import { getCity } from "./CityService.js";
 import { getHotel } from "./HotelService.js";
 import moment from "moment";
+import { getHotelCities, getHotelCity } from "./HotelCityService.js";
 
 const getHotelReservations = async () => {
   try {
     const result = await db.select().from("room_reservation");
     for (const element of result) {
-
-      element.room_res_start = moment(element.room_res_start).format('YYYY-MM-DD HH:mm:ss');
-      element.room_res_end = moment(element.room_res_end).format('YYYY-MM-DD HH:mm:ss');
+      element.room_res_start = moment(element.room_res_start).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      element.room_res_end = moment(element.room_res_end).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
 
       const user = await getUser(element.use_id);
       const hotelRoom = await getHotelRoom(element.hot_roo_id);
@@ -70,8 +74,12 @@ const getHotelReservation = async (id) => {
     if (result == null) {
       return null;
     }
-    result.room_res_start = moment(result.room_res_start).format('YYYY-MM-DD HH:mm:ss');
-    result.room_res_end = moment(result.room_res_end).format('YYYY-MM-DD HH:mm:ss');
+    result.room_res_start = moment(result.room_res_start).format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    result.room_res_end = moment(result.room_res_end).format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
 
     const user = await getUser(result.use_id);
     const hotelRoom = await getHotelRoom(result.hot_roo_id);
@@ -193,8 +201,8 @@ const deleteHotelReservation = async (id) => {
   }
 };
 
-const getHotelReservationsByCity = async (id) => {
-  try{
+const getHotelsByCity = async (id) => {
+  try {
     const result = await db.select().from("hotel_cities").where("city_id", id);
     for (const element of result) {
       const city = await getCity(element.city_id);
@@ -213,11 +221,80 @@ const getHotelReservationsByCity = async (id) => {
     }
 
     return result;
-  }catch(error){
+  } catch (error) {
     console.log(error);
     return error.message;
   }
-}
+};
+
+const getHotelReservationsByUser = async (id) => {
+  try {
+    const result = await db
+      .select()
+      .from("room_reservation")
+      .where("use_id", id);
+    for (const element of result) {
+      element.room_res_start = moment(element.room_res_start).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      element.room_res_end = moment(element.room_res_end).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+
+      const user = await getUser(element.use_id);
+      const hotelRoom = await getHotelRoom(element.hot_roo_id);
+      const hotelCity = await getHotelCity(hotelRoom.hot_city_id);
+      const {
+        hot_city_address,
+        hot_city_rating,
+        hot_city_img,
+        hot_city_desc,
+        city_name,
+        city_id,
+        coun_name,
+        hot_id,
+        hot_name,
+      } = hotelCity;
+
+      const { use_id, per_name, per_lastname, per_document } = user;
+      const {
+        room_id,
+        room_code,
+        hot_city_id,
+        hot_roo_desc,
+        hot_roo_price,
+        hot_roo_capacity,
+      } = hotelRoom;
+
+      Object.assign(element, {
+        hot_city_address,
+        hot_city_rating,
+        hot_city_img,
+        hot_city_desc,
+        city_name,
+        city_id,
+        coun_name,
+        hot_id,
+        hot_name,
+        use_id,
+        per_name,
+        per_lastname,
+        per_document,
+        room_id,
+        room_code,
+        hot_city_id,
+        hot_roo_desc,
+        hot_roo_price,
+        hot_roo_capacity,
+      });
+    }
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+};
 
 export {
   getHotelReservations,
@@ -225,5 +302,6 @@ export {
   createHotelReservation,
   updateHotelReservation,
   deleteHotelReservation,
-  getHotelReservationsByCity
+  getHotelsByCity,
+  getHotelReservationsByUser,
 };
