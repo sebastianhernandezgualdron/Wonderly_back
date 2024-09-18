@@ -72,12 +72,8 @@ const createUser = async (body) => {
       per_name: body.per_name,
       per_lastname: body.per_lastname,
       per_document: body.per_document,
-<<<<<<< Updated upstream
       per_telephone: body.per_telephone,
       
-=======
-      per_telephone: body.per_telephone
->>>>>>> Stashed changes
     });
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(body.use_password, saltRounds);
