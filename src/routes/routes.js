@@ -138,5 +138,10 @@ router.use(authenticate)
   .put("/hotels/reservation/:id", HotelReservationController.Amend)
   .delete("/hotels/reservation/:id", HotelReservationController.Delete)
   .get("/hotels/city/:id", HotelReservationController.getHotelsByCity)
-  .get("/hotels/reservation/user/:id", HotelReservationController.getHotelReservationsByUser);
+  .get("/hotels/reservation/user/:id", HotelReservationController.getHotelReservationsByUser)
+
+
+
+  ////FILTROOOOOOOS
+  .get("/hotels/colombia", HotelCityController.getHotelsColombia);
 export { router };

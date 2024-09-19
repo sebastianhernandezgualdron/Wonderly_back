@@ -153,15 +153,17 @@ const deleteActivityReservation = async (id) => {
     if (validation.error) {
       return validation.error;
     }
-    const reser = getActivityReservation(id);
-    const change = reser.act_res_status == 1 ? 0 : 1;
+    const reser = await getActivityReservation(id);
+    if (!reser) {
+      return { message: "Reserva no encontrada" };
+    }
+    reser.act_res_status = reser.act_res_status === 1 ? 0 : 1;
     const result = await db("activities_reservation")
       .where("act_res_id", id)
       .update({
-        act_res_status: change  
-      }
-    )
-    return result;
+        act_res_status: reser.act_res_status,
+      });
+    return reser.act_res_status;
   } catch (error) {
     console.log(error);
     return error;
@@ -169,7 +171,6 @@ const deleteActivityReservation = async (id) => {
 };
 
 const getActivitiesReservationsByUser = async (id) => {
-
   try {
     const rules = joi.object({
       id: joi.number().integer().positive().required(),
@@ -181,47 +182,47 @@ const getActivitiesReservationsByUser = async (id) => {
     const result = await db
       .select()
       .from("activities_reservation")
-      .where("use_id", id)
-      for (const element of result) {
-        const user = await UserController.getUser(element.use_id);
-        const activity = await ActivityController.getActivity(element.act_id);
-        const {
-          act_name,
-          act_desc,
-          act_address,
-          act_date,
-          act_time,
-          act_price,
-          city_id,
-          city_name,
-          coun_id,
-          coun_name,
-        } = activity;
-        const { per_name, per_lastname, use_mail, per_telephone } = user;
-  
-        Object.assign(element, {
-          act_name,
-          act_desc,
-          act_address,
-          act_date,
-          act_time,
-          act_price,
-          city_id,
-          city_name,
-          coun_id,
-          coun_name,
-          per_name,
-          per_lastname,
-          use_mail,
-          per_telephone,
-        });
-      }
+      .where("use_id", id);
+    for (const element of result) {
+      const user = await UserController.getUser(element.use_id);
+      const activity = await ActivityController.getActivity(element.act_id);
+      const {
+        act_name,
+        act_desc,
+        act_address,
+        act_date,
+        act_time,
+        act_price,
+        city_id,
+        city_name,
+        coun_id,
+        coun_name,
+      } = activity;
+      const { per_name, per_lastname, use_mail, per_telephone } = user;
+
+      Object.assign(element, {
+        act_name,
+        act_desc,
+        act_address,
+        act_date,
+        act_time,
+        act_price,
+        city_id,
+        city_name,
+        coun_id,
+        coun_name,
+        per_name,
+        per_lastname,
+        use_mail,
+        per_telephone,
+      });
+    }
     return result;
   } catch (error) {
     console.log(error);
     return error.message;
   }
-}
+};
 
 export {
   getActivitiesReservations,
@@ -229,5 +230,5 @@ export {
   createActivityReservation,
   updateActivityReservation,
   deleteActivityReservation,
-  getActivitiesReservationsByUser
+  getActivitiesReservationsByUser,
 };

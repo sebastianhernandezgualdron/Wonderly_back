@@ -154,10 +154,25 @@ const deleteHotelCity = async (id) => {
   }
 };
 
+const getHotelsColombia = async () => {
+  try {
+    const result = await db
+      .select()
+      .from("hotel_cities")
+      .join("cities", "cities.city_id", "hotel_cities.city_id")
+      .where("cities.coun_id", 4);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+}
+
 export {
   getHotelCities,
   getHotelCity,
   createHotelCity,
   updateHotelCity,
   deleteHotelCity,
+  getHotelsColombia
 };

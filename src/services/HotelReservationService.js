@@ -191,10 +191,17 @@ const deleteHotelReservation = async (id) => {
       return validation.error;
     }
 
+    const reser = await getHotelReservation(id);
+    if (!reser) {
+      return { message: "Reserva no room_reservation" };
+    }
+    reser.room_res_status = reser.room_res_status === 1 ? 0 : 1;
     const result = await db("room_reservation")
       .where("room_res_id", id)
-      .delete();
-    return result;
+      .update({
+        room_res_status: reser.room_res_status,
+      });
+    return reser.room_res_status;
   } catch (error) {
     console.log(error);
     return error;

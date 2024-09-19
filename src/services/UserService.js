@@ -171,8 +171,12 @@ const login = async (body, res) => {
       .from("users")
       .where("use_mail", body.use_mail)
       .first();
+
+   
     if (!user) {
       return res.json({ message: "Usuario no encontrado" });}
+
+      const userInfo = await getUser(user.use_id);
     const validPassword = await bcrypt.compare(
       body.use_password,
       user.use_password
@@ -188,6 +192,7 @@ const login = async (body, res) => {
     return res.status(200).json({
       status: true,
       message: "Usuario logueado correctamente",
+      data: userInfo,
       token: token,
     });
   } catch (error) {

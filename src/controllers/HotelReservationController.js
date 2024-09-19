@@ -75,13 +75,14 @@ const Delete = async (req, res) => {
   const result = await HotelReservationService.deleteHotelReservation(
     req.params.id
   );
-  if (result != 0) {
+  if (result != null) {
     return res.status(200).json(
       result.message
         ? { status: false, message: result.message }
         : {
             status: true,
             message: `Reservacion de hotel eliminado correctamente`,
+            data: result,
           }
     );
   } else {
