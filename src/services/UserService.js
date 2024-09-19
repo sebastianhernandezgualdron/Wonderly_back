@@ -52,7 +52,7 @@ const getUser = async (id) => {
 
 const createUser = async (body) => {
   try {
-    const rules = joi.object({
+      const rules = joi.object({
       per_name: joi.string().required(),
       per_lastname: joi.string().required(),
       per_document: joi.string().required(),
