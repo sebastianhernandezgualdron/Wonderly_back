@@ -19,12 +19,10 @@ const getCountry = async (id) => {
     if (validation.error) {
       return validation.error.message;
     }
-    const result = await db
-      .select()
-      .from("countries")
-      .where("coun_id", id)
-      .first();
-    return result;
+    const result = await db.raw("CALL leerPais(?)", [
+      id
+    ]);
+    return result[0][0][0];
   } catch (error) {
     console.log(error);
     return error.message;
@@ -41,9 +39,9 @@ const createCountry = async (body) => {
     if (validation.error) {
       return validation.error;
     }
-    const result = await db("countries").insert({
-      coun_name: body.coun_name,
-    });
+    const result = await db.raw("CALL crearPais(?)", [
+      body.coun_name
+    ]);
     return result;
   } catch (error) {
     console.log(error);
@@ -65,9 +63,10 @@ const updateCountry = async (id, body) => {
       return validation.error;
     }
 
-    const result = await db("countries").where("coun_id", id).update({
-      coun_name: body.coun_name
-    });
+    const result = await db.raw("CALL actualizarPais(?,?)", [
+      id,
+      body.coun_name
+    ]);
     return result;
   } catch (error) {
     console.log(error);
@@ -77,7 +76,6 @@ const updateCountry = async (id, body) => {
 
 const deleteCountry = async (id) => {
   try {
-
     const rules = joi.object({
       id: joi.number().integer().positive().required(),
     });
@@ -86,7 +84,9 @@ const deleteCountry = async (id) => {
       return validation.error;
     }
 
-    const result = await db("countries").where("coun_id", id).delete();
+    const result = await db.raw("CALL eliminarPais(?)", [
+      id
+    ]);
     return result;
   } catch (error) {
     console.log(error);
@@ -94,4 +94,10 @@ const deleteCountry = async (id) => {
   }
 };
 
-export { getCountries, getCountry, createCountry, updateCountry, deleteCountry };
+export {
+  getCountries,
+  getCountry,
+  createCountry,
+  updateCountry,
+  deleteCountry,
+};

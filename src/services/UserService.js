@@ -144,23 +144,35 @@ const deleteUsers = async (id) => {
 const login = async (body, res) => {
   try {
     const rules = joi.object({
-      use_mail: joi.string().email().required(),
-      use_password: joi.string().required(),
+      use_mail: joi.string().email().required().messages({
+        "string.email": "El correo electrónico debe ser válido.",
+        "string.empty": "El campo de correo no puede estar vacío.",
+        "any.required": "El correo electrónico es obligatorio.",
+      }),
+      use_password: joi.string().required().pattern(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/
+      ).messages({
+        "string.pattern.base": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.",
+        "string.empty": "La contraseña no puede estar vacía.",
+        "any.required": "La contraseña es obligatoria.",
+      }),
     });
 
     const validation = rules.validate(body);
     if (validation.error) {
-      return validation.error;
+      return res.status(400).json({
+        status: false,
+        message: validation.error.details[0].message, 
+      });
     }
-
+    
     const user = await db
       .select()
       .from("users")
       .where("use_mail", body.use_mail)
       .first();
     if (!user) {
-      return { message: "Usuario no encontrado" };
-    }
+      return res.json({ message: "Usuario no encontrado" });}
     const validPassword = await bcrypt.compare(
       body.use_password,
       user.use_password
@@ -180,20 +192,10 @@ const login = async (body, res) => {
     });
   } catch (error) {
     console.log(error);
-    return error;
-  }
-};
-
-const logout = async (res) => {
-  try {
-    return res.status(200).json({
-      status: true,
-      message: "Usuario deslogueado correctamente",
-      token: null,
-    });
-  } catch (error) {
-    console.log(error);
-    return error;
+    return res.status(400).json({
+        status: false,
+        message: error,
+      });
   }
 };
 export { getUsers, getUser, createUser, updateUsers, deleteUsers, login };

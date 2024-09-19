@@ -24,6 +24,7 @@ const Store = async (req, res) => {
 
   if (!result.sqlMessage && !result.message) {
     return res.status(200).json({ 
+      status: true,
       message: `Usuario: ${req.body.use_mail} creado correctamente`,
     });
   } else {

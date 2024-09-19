@@ -153,10 +153,14 @@ const deleteActivityReservation = async (id) => {
     if (validation.error) {
       return validation.error;
     }
-
+    const reser = getActivityReservation(id);
+    const change = reser.act_res_status == 1 ? 0 : 1;
     const result = await db("activities_reservation")
       .where("act_res_id", id)
-      .delete();
+      .update({
+        act_res_status: change  
+      }
+    )
     return result;
   } catch (error) {
     console.log(error);

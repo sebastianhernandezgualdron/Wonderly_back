@@ -9,6 +9,12 @@ const getHotelCities = async () => {
     for (const element of result) {
       const city = await getCity(element.city_id);
       const hotel = await getHotel(element.hot_id);
+      const hotel_type = await db
+        .select()
+        .from("hotel_type")
+        .where("hot_typ_id", element.hot_typ_id)
+        .first();
+      const { hot_typ_id, hot_typ_accommodation } = hotel_type;
       const { city_name, city_id, coun_name, coun_id } = city;
       const { hot_id, hot_name } = hotel;
 
@@ -19,6 +25,8 @@ const getHotelCities = async () => {
         coun_id,
         hot_id,
         hot_name,
+        hot_typ_id,
+        hot_typ_accommodation,
       });
     }
     return result;
@@ -46,6 +54,12 @@ const getHotelCity = async (id) => {
     }
     const city = await getCity(result.city_id);
     const hotel = await getHotel(result.hot_id);
+    const hotel_type = await db
+      .select()
+      .from("hotel_type")
+      .where("hot_typ_id", result.hot_typ_id)
+      .first();
+    const { hot_typ_id, hot_typ_accommodation } = hotel_type;
     const { city_name, city_id, coun_name, coun_id } = city;
     const { hot_id, hot_name } = hotel;
 
@@ -56,6 +70,8 @@ const getHotelCity = async (id) => {
       coun_id,
       hot_id,
       hot_name,
+      hot_typ_id,
+      hot_typ_accommodation,
     });
     return result;
   } catch (error) {
