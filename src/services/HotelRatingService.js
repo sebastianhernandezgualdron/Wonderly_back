@@ -102,12 +102,23 @@ const createHotelRating = async (body) => {
     if (validation.error) {
       return validation.error;
     }
-    const result = await db("ratings").insert({
+     await db("ratings").insert({
       rat_rating: body.rat_rating,
       use_id: body.use_id,
       hot_city_id: body.hot_city_id,
     });
-    return result;
+
+    const ratings = await db('ratings').where('hot_city_id', body.hot_city_id);
+    let promRate = 0;
+    for (const element of ratings) {
+      promRate += element.rat_rating;
+    }
+    promRate = promRate / ratings.length;
+      await db('hotel_cities').where('hot_city_id', body.hot_city_id).update({
+      hot_city_rating: promRate
+
+    })
+    return promRate;
   } catch (error) {
     console.log(error);
     return error;

@@ -26,6 +26,7 @@ const Store = async (req, res) => {
   if (!result.sqlMessage && !result.message) {
     return res.status(200).json({
       message: `Rating añadido correctamente`,
+      data: result,
     });
   } else {
     return res.status(400).json({
