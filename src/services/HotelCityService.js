@@ -168,11 +168,47 @@ const getHotelsColombia = async () => {
   }
 }
 
+const getMostPopularHotels = async () => {
+
+  try {
+    const result = await db
+      .select()
+      .from("hotel_cities")
+      .join("cities", "cities.city_id", "hotel_cities.city_id")
+      .join("countries", "countries.coun_id", "cities.coun_id")
+      .orderBy("hot_city_rating", "desc")
+      .limit(5);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+}
+
+const getLastHotels = async () => {
+
+  try {
+    const result = await db
+      .select()
+      .from("hotel_cities")
+      .join("cities", "cities.city_id", "hotel_cities.city_id")
+      .join("countries", "countries.coun_id", "cities.coun_id")
+      .orderBy("hot_city_id", "desc")
+      .limit(5);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+}
+
 export {
   getHotelCities,
   getHotelCity,
   createHotelCity,
   updateHotelCity,
   deleteHotelCity,
-  getHotelsColombia
+  getHotelsColombia,
+  getMostPopularHotels,
+  getLastHotels
 };
