@@ -45,6 +45,7 @@ router.use(authenticate)
   .post("/hotel", HotelController.Store)
   .put("/hotel/:id", HotelController.Amend)
   .delete("/hotel/:id", HotelController.Delete)
+ 
   //RUTAS HABITACIONES
   .get("/room", RoomController.Index)
   .get("/room/:id", RoomController.Show)
