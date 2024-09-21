@@ -13,6 +13,8 @@ const getHotelRooms = async () => {
       const {
         hot_city_address,
         hot_city_rating,
+        hot_city_img,
+        hot_city_desc,
         city_name,
         city_id,
         coun_name,
@@ -26,6 +28,8 @@ const getHotelRooms = async () => {
         room_id,
         hot_city_address,
         hot_city_rating,
+        hot_city_img,
+        hot_city_desc,
         city_name,
         city_id,
         coun_name,
@@ -58,11 +62,13 @@ const getHotelRoom = async (id) => {
       return null;
     }
     const room = await getRoom(result.city_id);
-    const hotelcity = await getHotelCity(result.hot_id);
+    const hotelcity = await getHotelCity(result.hot_city_id);
     const { room_code, room_id } = room;
     const {
       hot_city_address,
       hot_city_rating,
+      hot_city_img,
+      hot_city_desc,
       city_name,
       city_id,
       coun_name,
@@ -76,6 +82,8 @@ const getHotelRoom = async (id) => {
       room_id,
       hot_city_address,
       hot_city_rating,
+      hot_city_img,
+      hot_city_desc,
       city_name,
       city_id,
       coun_name,

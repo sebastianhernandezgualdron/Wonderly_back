@@ -39,7 +39,7 @@ const Show = async (req, res) => {
   if (result != null) {
     return res
       .status(200)
-      .json({data:result});
+      .json(result);
   } else {
     return res.status(400).json({
       message: `Error al obtener las habitaciones en hoteles`,
