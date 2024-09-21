@@ -146,5 +146,6 @@ router.use(authenticate)
   ////FILTROOOOOOOS
   .get("/hotels/colombia", HotelCityController.getHotelsColombia)
   .get("/hotels/popular", HotelCityController.getMostPopularHotels)
-  .get("/hotels/last", HotelCityController.getLastHotels);
+  .get("/hotels/last", HotelCityController.getLastHotels)
+  .post("/hotels/find", HotelRoomController.findHotelsRooms);
 export { router };

@@ -87,4 +87,20 @@ const Delete = async (req, res) => {
   }
 };
 
-export { Index, Store, Amend, Show, Delete };
+const findHotelsRooms = async (req, res) => {
+
+  const result = await HotelRoomService.findHotelsRooms(req.body);
+  if (result != null) {
+    return res
+      .status(200)
+      .json(result);
+  } else {
+    return res.status(400).json({
+      message: `Error al obtener las habitaciones en hoteles`,
+      sqlMessage: "No se encontró las habitaciones en hoteles",
+    });
+  }
+
+}
+
+export { Index, Store, Amend, Show, Delete, findHotelsRooms };

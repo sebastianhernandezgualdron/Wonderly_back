@@ -164,10 +164,46 @@ const deleteHotelRoom = async (id) => {
   }
 };
 
+
+const findHotelsRooms = async (body) => {
+
+  try {
+    const result = await db.select("hr.*", "hc.*", "c.*", "co.*", "h.*", "r.*")
+    .from("hotel_rooms as hr")
+    .join("hotel_cities as hc", "hr.hot_city_id", "hc.hot_city_id")
+    .join("cities as c", "hc.city_id", "c.city_id")
+    .join("countries as co", "c.coun_id", "co.coun_id")
+    .join("hotels as h", "hc.hot_id", "h.hot_id")
+    .join("rooms as r", "hr.room_id", "r.room_id")
+    .where("c.city_id", body.city_id)
+    .where("hr.hot_roo_capacity", body.capacity)
+    for (const element of result) {
+      const resStartDate = new Date(body.res_start);
+      const resEndDate = new Date(body.res_end);
+      const startHour = resStartDate.getHours();
+      const endHour = resEndDate.getHours();
+      const diffInMs = resEndDate - resStartDate;
+      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)); 
+      let totalPrice = diffInDays * element.hot_roo_price;
+      if(startHour < endHour){
+        totalPrice -= element.hot_roo_price;
+      }
+      element.total_price = totalPrice;
+    }
+    
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+
+}
+
 export {
   getHotelRooms,
   getHotelRoom,
   createHotelRoom,
   updateHotelRoom,
   deleteHotelRoom,
+  findHotelsRooms
 };
