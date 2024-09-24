@@ -186,7 +186,7 @@ const login = async (body, res) => {
     }
 
     const token = sign({ id: user.use_id }, process.env.SECRET, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
 
     return res.status(200).json({
