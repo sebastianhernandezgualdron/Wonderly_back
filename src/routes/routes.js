@@ -21,10 +21,12 @@ import { authenticate } from "../middlewares/authenticate.js";
 
 router.post("/register/", UserController.Store)
 router.post("/login/", UserController.Login)
-.get("/hotel", HotelController.Index)
-.get("/activity/", ActivityController.Index)
-.get("/hotels/city/", HotelCityController.Index)
-.post("/hotels/find", HotelRoomController.findHotelsRooms);
+router.get("/hotel", HotelController.Index)
+router.get("/activity/", ActivityController.Index)
+router.get("/hotels/city/", HotelCityController.Index)
+router.post("/hotels/find", HotelRoomController.findHotelsRooms)
+router.post("/hotels/search", HotelCityController.searchHotelsByLocation)
+router.post("/hotels/search/filter", HotelCityController.searchAndFilterHotels)
 
 router.use(authenticate)
 
@@ -146,4 +148,5 @@ router.use(authenticate)
   .get("/hotels/colombia", HotelCityController.getHotelsColombia)
   .get("/hotels/popular", HotelCityController.getMostPopularHotels)
   .get("/hotels/last", HotelCityController.getLastHotels)
+
 export { router };
