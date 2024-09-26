@@ -9,7 +9,7 @@ const Index = async (req, res) => {
       message: "No hay servicios en hoteles",
     });
   } else if (result && !result.sqlMessage) {
-    return res.status(200).json(result);
+    return res.status(200).json({data:result});
   } else {
     return res.status(400).json({
       message: "Error al obtener las servicios en hoteles",
