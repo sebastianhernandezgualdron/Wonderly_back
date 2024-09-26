@@ -35,6 +35,7 @@ const getHotelCities = async () => {
     return error.message;
   }
 };
+
 const getHotelCity = async (id) => {
   try {
     const rules = joi.object({

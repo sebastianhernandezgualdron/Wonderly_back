@@ -21,9 +21,12 @@ import { authenticate } from "../middlewares/authenticate.js";
 
 router.post("/register/", UserController.Store)
 router.post("/login/", UserController.Login)
+.get("/hotel", HotelController.Index)
+.get("/activity/", ActivityController.Index)
+.get("/hotels/city/", HotelCityController.Index)
+.post("/hotels/find", HotelRoomController.findHotelsRooms);
 
 router.use(authenticate)
-
 
   //RUTAS PERSONAS
   .get("/person", PersonController.Index)
@@ -40,7 +43,6 @@ router.use(authenticate)
   .delete("/country/:id", CountryController.Delete)
 
   //RUTAS HOTELES
-  .get("/hotel", HotelController.Index)
   .get("/hotel/:id", HotelController.Show)
   .post("/hotel", HotelController.Store)
   .put("/hotel/:id", HotelController.Amend)
@@ -68,7 +70,6 @@ router.use(authenticate)
   .delete("/city/:id", CityController.Delete)
 
   //RUTAS ACTIVIDADES
-  .get("/activity/", ActivityController.Index)
   .get("/activity/:id", ActivityController.Show)
   .post("/activity/", ActivityController.Store)
   .put("/activity/:id", ActivityController.Amend)
@@ -98,7 +99,6 @@ router.use(authenticate)
   .get("/reservation/activity/user/:id", ActivitiesReservationController.getActivitiesReservationsByUser)
 
   //RUTAS HOTELES EN CIUDAD
-  .get("/hotels/city/", HotelCityController.Index)
   .get("/hotels/city/:id", HotelCityController.Show)
   .post("/hotels/city/", HotelCityController.Store)
   .put("/hotels/city/:id", HotelCityController.Amend)
@@ -142,10 +142,8 @@ router.use(authenticate)
   .get("/hotels/reservation/user/:id", HotelReservationController.getHotelReservationsByUser)
 
 
-
   ////FILTROOOOOOOS
   .get("/hotels/colombia", HotelCityController.getHotelsColombia)
   .get("/hotels/popular", HotelCityController.getMostPopularHotels)
   .get("/hotels/last", HotelCityController.getLastHotels)
-  .post("/hotels/find", HotelRoomController.findHotelsRooms);
 export { router };
