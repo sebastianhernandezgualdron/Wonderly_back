@@ -102,7 +102,10 @@ const FavoriteHotelsByUser = async (req, res) => {
       message: "No hay hoteles favoritos",
     });
   } else if (result && !result.sqlMessage) {
-    return res.status(200).json(result);
+    return res.status(200).json({
+      status: true,
+      data: result,
+    });
   } else {
     return res.status(400).json({
       message: "Error al obtener las hoteles favoritos",

@@ -175,10 +175,10 @@ const getFavoriteActivitiesByUser = async (id) => {
     for(const element of result){
       const activity = await ActivityController.getActivity(element.act_id);
 
-      const {act_name,act_desc,act_address,act_date,act_time,act_price,city_id} = activity;
+      const {act_name,act_desc,act_address,act_date,act_time,act_img, act_price,city_id} = activity;
       
 
-      Object.assign(element,{act_name,act_desc,act_address,act_date,act_time,act_price,city_id});
+      Object.assign(element,{act_name,act_desc,act_address,act_date,act_time,act_img,act_price,city_id});
     }
 
     return result;
