@@ -81,7 +81,7 @@ const Delete = async (req, res) => {
         ? { status: false, message: result.message }
         : {
             status: true,
-            message: `Reservacion de hotel eliminado correctamente`,
+            message: `Su reservación se ha cancelado correctamente`,
             data: result,
           }
     );
