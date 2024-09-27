@@ -105,7 +105,7 @@ router.use(authenticate)
   .post("/hotels/city/", HotelCityController.Store)
   .put("/hotels/city/:id", HotelCityController.Amend)
   .delete("/hotels/city/:id", HotelCityController.Delete)
-  .get("/hotels/type/:id", HotelCityController.getTypeHotels)
+  .get("/hotels/type", HotelCityController.getTypeHotels)
 
   //RUTAS HABITACIONES EN HOTEL
   .get("/hotels/room/", HotelRoomController.Index)
