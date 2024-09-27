@@ -11,7 +11,8 @@ const Index = async (req, res) => {
   } else if (result && !result.sqlMessage) {
     return res.status(200).json({
       status: true,
-      data: result,
+      data: result.map(e=>{return{...e,hot_city_ubicacion:{x: parseFloat(String(e.hot_city_ubicacion.x).substring(0, 10)), y: parseFloat(String(e.hot_city_ubicacion.y).substring(0, 10))
+      }}}),
     });
   } else {
     return res.status(400).json({
@@ -41,7 +42,7 @@ const Show = async (req, res) => {
   if (result != null) {
     return res
       .status(200)
-      .json(result);
+      .json({data:result});
   } else {
     return res.status(400).json({
       message: `Error al obtener el hotel en ciudad`,
