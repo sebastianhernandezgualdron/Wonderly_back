@@ -351,6 +351,17 @@ const searchAndFilterHotels = async (body) => {
   }
 };
 
+const getTypeHotels = async () => {
+  try {
+    const result = await db.select().from("hotel_type");
+    return result;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+
+}
+
 
 export {
   getHotelCities,
@@ -363,5 +374,6 @@ export {
   getLastHotels,
   getHotelByCity,
   searchHotelsByLocation,
-  searchAndFilterHotels
+  searchAndFilterHotels,
+  getTypeHotels
 };
