@@ -77,7 +77,7 @@ const Delete = async (req, res) => {
       .json(
         result.message
           ? { status: false, message: result.message }
-          : { status: true, message: `Actividad favorita eliminado correctamente` }
+          : { status: true, message: `La actividad ha sido eliminada de favoritos` }
       );
   } else {
     return res.status(400).json({

@@ -147,7 +147,6 @@ const deleteFavoriteHotel = async (id) => {
     if (validation.error) {
       return validation.error;
     }
-
     const result = await db("favorite_hotels").where("fav_hot_id", id).delete();
     return result;
   } catch (error) {

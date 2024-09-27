@@ -82,7 +82,7 @@ const Delete = async (req, res) => {
         ? { status: false, message: result.message }
         : {
             status: true,
-            message: `Servicio en hotel eliminado correctamente`,
+            message: `El hotel ha sido eliminado de favoritos correctamente`,
           }
     );
   } else {
