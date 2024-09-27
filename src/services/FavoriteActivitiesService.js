@@ -2,13 +2,16 @@ import { db } from "../../database.js";
 import joi from "joi";
 import * as ActivityController from "../services/ActivityService.js";
 import * as UserController from "../services/UserService.js";
-
+import * as CityController from "../services/CityService.js";
 const getFavoriteActivities = async () => {
   try {
     const result = await db.select().from("favorite_activities");
     for (const element of result) {
       const user = await UserController.getUser(element.use_id);
       const activity = await ActivityController.getActivity(element.act_id);
+      const city = await CityController.getCity(activity.city_id);
+
+      const { city_name, coun_id, coun_name } = city;
       const {
         act_name,
         act_desc,
@@ -32,6 +35,9 @@ const getFavoriteActivities = async () => {
         per_lastname,
         use_mail,
         per_telephone,
+        city_name,
+        coun_id,
+        coun_name,
       });
     }
     return result;
@@ -57,6 +63,9 @@ const getFavoriteActivity = async (id) => {
     const user = await UserController.getUser(result.use_id);
 
     const activity = await ActivityController.getActivity(result.act_id);
+    const city = await CityController.getCity(activity.city_id);
+
+      const { city_name, coun_id, coun_name } = city;
     const {
       act_name,
       act_desc,
@@ -79,6 +88,7 @@ const getFavoriteActivity = async (id) => {
       per_lastname,
       use_mail,
       per_telephone,
+      city_name, coun_id, coun_name
     });
     return result;
   } catch (error) {
@@ -158,37 +168,54 @@ const deleteFavoriteActivities = async (id) => {
 };
 
 const getFavoriteActivitiesByUser = async (id) => {
-  try{
-
+  try {
     const rules = joi.object({
       id: joi.number().integer().positive().required(),
     });
 
-    const validation = rules.validate({id:id});
+    const validation = rules.validate({ id: id });
 
-    if(validation.error){
+    if (validation.error) {
       return validation.error.message;
     }
 
-    const result = await db.select().from("favorite_activities").where("use_id",id);
+    const result = await db
+      .select()
+      .from("favorite_activities")
+      .where("use_id", id);
 
-    for(const element of result){
+    for (const element of result) {
       const activity = await ActivityController.getActivity(element.act_id);
+      const city = await CityController.getCity(activity.city_id);
 
-      const {act_name,act_desc,act_address,act_date,act_time,act_price,city_id} = activity;
-      
+      const { city_name, coun_id, coun_name } = city;
+      const {
+        act_name,
+        act_desc,
+        act_address,
+        act_date,
+        act_time,
+        act_img,
+        act_price,
+        city_id,
+      } = activity;
 
-      Object.assign(element,{act_name,act_desc,act_address,act_date,act_time,act_price,city_id});
+      Object.assign(element, {
+        act_name,
+        act_desc,
+        act_address,
+        act_date,
+        act_time,
+        act_img,
+        act_price,
+        city_id,
+        city_name, coun_id, coun_name 
+      });
     }
 
     return result;
-  }catch(error){
-
-
-  }
-
-
-}
+  } catch (error) {}
+};
 
 export {
   getFavoriteActivities,
@@ -196,5 +223,5 @@ export {
   createFavoriteActivity,
   updateFavoriteActivity,
   deleteFavoriteActivities,
-  getFavoriteActivitiesByUser
+  getFavoriteActivitiesByUser,
 };

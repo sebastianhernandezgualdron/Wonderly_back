@@ -168,6 +168,18 @@ const deleteHotelRoom = async (id) => {
 const findHotelsRooms = async (body) => {
 
   try {
+    const rules = joi.object({
+      city_id: joi.number().integer().positive().required(),
+      capacity: joi.number().integer().positive().required(),
+      res_start: joi.date().required(),
+      res_end: joi.date().required(),
+    });
+
+    const validation = rules.validate(body);
+    if (validation.error) {
+      return validation.error.message;
+    }
+
     const result = await db.select("hr.*", "hc.*", "c.*", "co.*", "h.*", "r.*")
     .from("hotel_rooms as hr")
     .join("hotel_cities as hc", "hr.hot_city_id", "hc.hot_city_id")
@@ -178,6 +190,11 @@ const findHotelsRooms = async (body) => {
     .where("c.city_id", body.city_id)
     .where("hr.hot_roo_capacity", body.capacity)
     for (const element of result) {
+      element.room_imgs = [];
+      const room_imgs = await db.select().from("room_imgs").where("hot_roo_id", element.hot_roo_id);
+      for (const img of room_imgs) {
+        element.room_imgs.push(img.roo_img_url);
+      }
       const resStartDate = new Date(body.res_start);
       const resEndDate = new Date(body.res_end);
       const startHour = resStartDate.getHours();

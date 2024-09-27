@@ -142,4 +142,60 @@ const getLastHotels = async (req, res) => {
   }
 }
 
-export { Index, Store, Amend, Show, Delete ,getHotelsColombia, getMostPopularHotels, getLastHotels};
+const searchHotelsByLocation = async (req, res) => {
+
+  const result = await HotelCityService.searchHotelsByLocation(req.body);
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay hoteles en esa ubicación",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener los hoteles en esa ubicación",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+
+}
+
+const searchAndFilterHotels = async (req, res) => {
+
+  const result = await HotelCityService.searchAndFilterHotels(req.body);
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay hoteles con esos filtros",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener los hoteles con esos filtros",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+}
+
+const getTypeHotels = async (req, res) => {
+
+  const result = await HotelCityService.getTypeHotels(req.body);
+  if (Array.isArray(result) && result.length === 0) {
+    return res.status(200).json({
+      message: "No hay hoteles de ese tipo",
+    });
+  } else if (result && !result.sqlMessage) {
+    return res.status(200).json(result);
+
+  } else {
+    return res.status(400).json({
+      message: "Error al obtener los hoteles de ese tipo",
+      sqlMessage: result.sqlMessage,
+    });
+  }
+
+}
+
+export { Index, Store, Amend, Show, Delete ,getHotelsColombia, getMostPopularHotels, getLastHotels, searchHotelsByLocation, searchAndFilterHotels, getTypeHotels};

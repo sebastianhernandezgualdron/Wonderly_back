@@ -77,7 +77,7 @@ const Delete = async (req, res) => {
       .json(
         result.message
           ? { status: false, message: result.message }
-          : { status: true, message: `Actividad favorita eliminado correctamente` }
+          : { status: true, message: `La actividad ha sido eliminada de favoritos` }
       );
   } else {
     return res.status(400).json({
@@ -94,7 +94,10 @@ const FavoriteActivitiesByUser = async (req, res) => {
       message: "No hay actividades favoritas para este usuario",
     });
   } else if (result && !result.sqlMessage) {
-    return res.status(200).json(result);
+    return res.status(200).json({
+      status: true,
+      data: result,
+    });
   } else {
     return res.status(400).json({
       message: "Error al obtener la lista de actividades favoritas",

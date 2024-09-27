@@ -9,7 +9,7 @@ import { getHotelCities, getHotelCity } from "./HotelCityService.js";
 
 const getHotelReservations = async () => {
   try {
-    const result = await db.select().from("room_reservation");
+    const result = await db.select().from("room_reservation").where("room_res_status", 1);
     for (const element of result) {
       element.room_res_start = moment(element.room_res_start).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -70,6 +70,7 @@ const getHotelReservation = async (id) => {
       .select()
       .from("room_reservation")
       .where("room_res_id", id)
+      .where("room_res_status", 1)
       .first();
     if (result == null) {
       return null;
@@ -239,7 +240,8 @@ const getHotelReservationsByUser = async (id) => {
     const result = await db
       .select()
       .from("room_reservation")
-      .where("use_id", id);
+      .where("use_id", id)
+      .where("room_res_status", 1);
     for (const element of result) {
       element.room_res_start = moment(element.room_res_start).format(
         "YYYY-MM-DD HH:mm:ss"

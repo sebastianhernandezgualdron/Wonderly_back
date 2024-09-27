@@ -5,7 +5,7 @@ import * as UserController from "../services/UserService.js";
 
 const getActivitiesReservations = async () => {
   try {
-    const result = await db.select().from("activities_reservation");
+    const result = await db.select().from("activities_reservation").where("act_res_status", 1);
     for (const element of result) {
       const user = await UserController.getUser(element.use_id);
       const activity = await ActivityController.getActivity(element.act_id);
@@ -53,6 +53,7 @@ const getActivityReservation = async (id) => {
       .select()
       .from("activities_reservation")
       .where("act_res_id", id)
+      .where("act_res_status", 1)
       .first();
     const user = await UserController.getUser(result.use_id);
 
@@ -182,6 +183,7 @@ const getActivitiesReservationsByUser = async (id) => {
     const result = await db
       .select()
       .from("activities_reservation")
+      .where("act_res_status", 1)
       .where("use_id", id);
     for (const element of result) {
       const user = await UserController.getUser(element.use_id);
