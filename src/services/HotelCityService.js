@@ -315,16 +315,13 @@ const searchAndFilterHotels = async (body) => {
       query = query.where("countries.coun_id", body.coun_id);
     }
 
- 
     if (body.price_min || body.price_max) {
       query = query.whereBetween("hotel_rooms.hot_roo_price", [body.price_min || 0, body.price_max || Infinity]);
     }
-
    
     if (body.rating) {
       query = query.where("hotel_cities.hot_city_rating", ">=", body.rating);
     }
-
 
     if (body.type_accommodation) {
       query = query.where("hotel_type.hot_typ_id", body.type_accommodation);
@@ -343,7 +340,6 @@ const searchAndFilterHotels = async (body) => {
         element.room_imgs.push("No hay imagenes");
       }
   }
-
     return result;
   } catch (error) {
     console.log(error);

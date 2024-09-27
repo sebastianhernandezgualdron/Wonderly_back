@@ -169,8 +169,10 @@ const searchAndFilterHotels = async (req, res) => {
       message: "No hay hoteles con esos filtros",
     });
   } else if (result && !result.sqlMessage) {
-    return res.status(200).json(result);
-
+    return res.status(200).json({
+      status: true,
+      data: result,
+    });
   } else {
     return res.status(400).json({
       message: "Error al obtener los hoteles con esos filtros",
@@ -187,8 +189,10 @@ const getTypeHotels = async (req, res) => {
       message: "No hay hoteles de ese tipo",
     });
   } else if (result && !result.sqlMessage) {
-    return res.status(200).json(result);
-
+    return res.status(200).json({
+      status: true,
+      data: result,
+    });
   } else {
     return res.status(400).json({
       message: "Error al obtener los hoteles de ese tipo",
