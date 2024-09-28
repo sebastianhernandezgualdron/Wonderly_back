@@ -20,7 +20,6 @@ const getFavoriteHotels = async () => {
         hot_id,
         hot_name,
       } = hotelcity;
-
       Object.assign(element, {
         use_id,
         per_name,

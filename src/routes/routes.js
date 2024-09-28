@@ -27,6 +27,8 @@ router.get("/hotels/city/", HotelCityController.Index)
 router.post("/hotels/find", HotelRoomController.findHotelsRooms)
 router.post("/hotels/search", HotelCityController.searchHotelsByLocation)
 router.post("/hotels/search/filter", HotelCityController.searchAndFilterHotels)
+router.get("/city/", CityController.Index)
+router.get("/hotels/type", HotelCityController.getTypeHotels)
 
 router.use(authenticate)
 
@@ -65,7 +67,6 @@ router.use(authenticate)
   .delete("/services/:id", HotelServicesController.Delete)
 
   //RUTAS CIUDADES
-  .get("/city/", CityController.Index)
   .get("/city/:id", CityController.Show)
   .post("/city/", CityController.Store)
   .put("/city/:id", CityController.Amend)
@@ -105,7 +106,6 @@ router.use(authenticate)
   .post("/hotels/city/", HotelCityController.Store)
   .put("/hotels/city/:id", HotelCityController.Amend)
   .delete("/hotels/city/:id", HotelCityController.Delete)
-  .get("/hotels/type", HotelCityController.getTypeHotels)
 
   //RUTAS HABITACIONES EN HOTEL
   .get("/hotels/room/", HotelRoomController.Index)

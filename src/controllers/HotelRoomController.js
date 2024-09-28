@@ -10,7 +10,10 @@ const Index = async (req, res) => {
 
     });
   } else if (result && !result.sqlMessage) {
-    return res.status(200).json(result);
+    return res.status(200).json({
+      status: true,
+      data: result,
+    });
   } else {
     return res.status(400).json({
       message: "Error al obtener las habitaciones en hoteles",
@@ -91,9 +94,10 @@ const findHotelsRooms = async (req, res) => {
 
   const result = await HotelRoomService.findHotelsRooms(req.body);
   if (result != null) {
-    return res
-      .status(200)
-      .json(result);
+    return res.status(200).json({
+      status: true,
+      data: result,
+    });
   } else {
     return res.status(400).json({
       message: `Error al obtener las habitaciones en hoteles`,

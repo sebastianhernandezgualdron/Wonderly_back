@@ -355,7 +355,6 @@ const getTypeHotels = async () => {
     console.log(error);
     return error.message;
   }
-
 }
 
 
